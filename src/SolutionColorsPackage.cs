@@ -65,6 +65,8 @@ namespace SolutionColors
             {
                 await JoinableTaskFactory.SwitchToMainThreadAsync();
 
+                //await ColorHelper.DoTest();
+
                 await ColorHelper.ResetInstanceAsync();
 
                 string colorMaster = await ColorHelper.GetColorAsync("master");

@@ -38,5 +38,48 @@ namespace SolutionColors
 
             return null;
         }
+
+        public static FrameworkElement FindChildByItsType(
+            this DependencyObject root,
+            string type
+            )
+        {
+            if (root == null)
+            {
+                throw new ArgumentNullException(nameof(root));
+            }
+
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            int childrenCount = VisualTreeHelper.GetChildrenCount(root);
+
+            for (int cc = 0; cc < childrenCount; cc++)
+            {
+                DependencyObject control = VisualTreeHelper.GetChild(
+                    root,
+                    cc
+                    );
+
+                if (control is FrameworkElement fe)
+                {
+                    if (fe.GetType().Name == type)
+                    {
+                        return fe;
+                    }
+                }
+
+                FrameworkElement result = control.FindChildByItsType(type);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+
     }
 }

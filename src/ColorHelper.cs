@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Telemetry;
 
 namespace SolutionColors
@@ -25,6 +26,169 @@ namespace SolutionColors
         //colorMaster: the color of master branch
         //colorBranch: the color of branch (= master branch color when unitary coloration)
 
+        //public static async Task DoTest()
+        //{
+        //    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+        //    try
+        //    {
+        //        Solution solution = await VS.Solutions.GetCurrentSolutionAsync();
+        //        Shell shell = VS.Shell;
+        //        //await VS.Windows.CreateOutputWindowPaneAsync("Testausgabe MK", false);
+        //        VS.Events.WindowEvents.Created += WindowEvents_Created;
+        //        VS.Events.WindowEvents.FrameIsOnScreenChanged += WindowEvents_FrameIsOnScreenChanged;
+        //        VS.Events.WindowEvents.FrameIsVisibleChanged += WindowEvents_FrameIsVisibleChanged;
+        //        VS.Events.WindowEvents.ActiveFrameChanged += WindowEvents_ActiveFrameChanged;
+                
+        //        IEnumerable<WindowFrame> frames1 = await VS.Windows.GetAllWindowsAsync();
+        //        IEnumerable<WindowFrame> frames2 = await VS.Windows.GetAllToolWindowsAsync();
+        //        IEnumerable<WindowFrame> frames3 = await VS.Windows.GetAllDocumentWindowsAsync();
+        //        List<WindowFrame> lstFrames1 = frames1.ToList();
+        //        List<WindowFrame> lstFrames2 = frames2.ToList();
+        //        List<WindowFrame> lstFrames3 = frames3.ToList();
+        //        //WindowFrame f1 = lstFrames2[0];
+        //        //IVsWindowFrame f1x = (IVsWindowFrame)f1;
+        //        //f1x.SetProperty(-3004, "Test");
+        //        string s1 = "a";
+
+        //        DoColorTest();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string err = ex.Message;
+        //    }
+        //    string s2 = "b";
+        //}
+
+        //private static void WindowEvents_ActiveFrameChanged(ActiveFrameChangeEventArgs obj)
+        //{
+        //    DoColorTest();
+        //}
+
+        //private static void WindowEvents_FrameIsVisibleChanged(FrameVisibilityEventArgs obj)
+        //{
+        //    System.Diagnostics.Debug.Write("WindowEvents_FrameIsVisibleChanged: " + obj.ToString());
+        //    IVsWindowFrame frame = obj.Frame;
+        //    //frame.
+        //    //Application.Current.MainWindow.FindChild<Border>(controlName);
+
+        //    DoColorTest();
+        //}
+
+        //private static void WindowEvents_FrameIsOnScreenChanged(FrameOnScreenEventArgs obj)
+        //{
+        //    System.Diagnostics.Debug.Write("WindowEvents_FrameIsOnScreenChanged: " + obj.ToString());
+        //    IVsWindowFrame frame = obj.Frame;
+
+
+        //    DoColorTest();
+
+        //    string s1 = "A";
+        //}
+
+        //private static void WindowEvents_Created(WindowFrame obj)
+        //{
+        //    //System.Diagnostics.Debug.Write("WindowEvents_Created: " + obj.ToString());
+        //    DoColorTest();
+        //}
+
+
+        //private static void DoColorTest()
+        //{
+        //    try
+        //    {
+        //        WindowCollection window = Application.Current.Windows;
+
+
+
+
+        //        foreach (System.Windows.Window w in Application.Current.Windows)
+        //        {
+        //            try
+        //            {
+        //                if (w == Application.Current.MainWindow)
+        //                    continue;
+
+        //                //Application.Current
+        //                string s1a = w.GetType().Name;
+        //                Border b1 = w.FindChild<Border>("TextBorder");
+
+        //                if (w.GetType().Name.Contains("FloatingWindow"))
+        //                {
+        //                    w.Background = new SolidColorBrush(Colors.White);
+        //                    //w.BorderBrush = new SolidColorBrush(Colors.White);
+        //                    //w.BorderThickness = new Thickness(3);
+        //                    object x = w.Content;
+        //                }
+        //                else if (w.GetType().Name.Contains("AdornerWindow"))
+        //                    w.Background = new SolidColorBrush(Colors.Red);
+        //                else
+        //                    w.Background = new SolidColorBrush(Colors.Green);
+        //                //w.BorderBrush = new SolidColorBrush(Colors.Orange);
+        //                //w.BorderThickness = new Thickness(3);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                string err = ex.Message;
+        //            }
+
+        //            if (!w.GetType().Name.Contains("FloatingWindow")) //at the moment we support only floating window
+        //            {
+        //                continue;
+        //            }
+
+
+        //            FrameworkElement fe = w.FindChildByItsType("TestWindowToolWindowControl");
+        //            if (fe == null)
+        //            {
+        //                continue;
+        //            }
+
+        //            if (fe is Control c)
+        //            {
+        //                //c.BorderBrush = new SolidColorBrush(Colors.Red);
+        //                ////c.BorderThickness = new Thickness(General.Instance.Width);
+        //                //c.BorderThickness = new Thickness(4);
+        //                break;
+        //            }
+        //        }
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string err = ex.Message;
+        //    }
+        //}
+
+        //private static void ShowInTestExplorer(SolidColorBrush color)
+        //{
+        //    foreach (System.Windows.Window w in Application.Current.Windows)
+        //    {
+        //        if (!w.GetType().Name.Contains("FloatingWindow")) //at the moment we support only floating window
+        //        {
+        //            continue;
+        //        }
+
+        //        FrameworkElement fe = w.FindChildByItsType("TestWindowToolWindowControl");
+        //        if (fe == null)
+        //        {
+        //            continue;
+        //        }
+
+        //        if (fe is Control c)
+        //        {
+        //            c.BorderBrush = color;
+        //            //c.BorderThickness = new Thickness(General.Instance.Width);
+        //            c.BorderThickness = new Thickness(4);
+        //            break;
+        //        }
+        //    }
+        //}
+
+
+
+
         public static async Task ResetInstanceAsync()
         {
             _colorEntries = null;
@@ -39,7 +203,7 @@ namespace SolutionColors
 
             if (_colorEntries == null)
             {
-                await LoadColorsAsync(await GitHelper.GetBranchNameAsync());
+                await LoadColorsAsync();
             }
 
             string fileName = await GetFileNameAsync();
@@ -81,7 +245,7 @@ namespace SolutionColors
         {
             if (_colorEntries == null)
             {
-                await LoadColorsAsync(branch);
+                await LoadColorsAsync();
             }
 
             ColorEntry colorEntry = _colorEntries.FirstOrDefault(x => x.branch == branch);
@@ -107,7 +271,7 @@ namespace SolutionColors
             await SetUiColorAsync();
         }
         
-        public static async Task LoadColorsAsync(string branch)
+        public static async Task LoadColorsAsync()
         {
             if (_colorEntries == null)
             {
